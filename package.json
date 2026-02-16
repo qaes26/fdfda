@@ -1,0 +1,13 @@
+{
+  "name": "fadfada-ai",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node api/chat.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.1.3"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
