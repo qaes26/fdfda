@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,61 +8,137 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #0f172a; color: #e2e8f0; overflow: hidden; }
-        
-        /* Cosmic Background */
-        .cosmic-bg { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
-            background: radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.15) 0%, transparent 40%), 
-                        radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%); 
-            animation: cosmic-pulse 10s infinite alternate; 
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow: hidden;
         }
-        @keyframes cosmic-pulse { 0% { opacity: 0.5; transform: scale(1); } 100% { opacity: 1; transform: scale(1.1); } }
-        
+
+        /* Cosmic Background */
+        .cosmic-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
+            animation: cosmic-pulse 10s infinite alternate;
+        }
+
+        @keyframes cosmic-pulse {
+            0% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
         /* Utilities */
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .text-glow { text-shadow: 0 0 10px rgba(139, 92, 246, 0.5); }
-        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
         /* Animations */
-        .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-        
-        .message-enter { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: scale(0.9); }
-        @keyframes popIn { to { opacity: 1; transform: scale(1); } }
-        
-        .modal { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .modal-active { opacity: 1; pointer-events: auto; transform: scale(1); }
-        .modal-inactive { opacity: 0; pointer-events: none; transform: scale(0.9); }
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        .message-enter {
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        .modal-inactive {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.9);
+        }
     </style>
 </head>
+
 <body class="h-screen flex flex-col items-center justify-center relative selection:bg-violet-500 selection:text-white">
     <div class="cosmic-bg"></div>
-    
+
     <!-- App Container -->
-    <div class="w-full h-full md:h-[90vh] md:w-[450px] bg-[#1e293b] md:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden relative border border-slate-700/50">
-        
+    <div
+        class="w-full h-full md:h-[90vh] md:w-[450px] bg-[#1e293b] md:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden relative border border-slate-700/50">
+
         <!-- Header -->
-        <header class="bg-slate-900/80 p-5 flex items-center justify-between border-b border-slate-700/50 backdrop-blur-md z-10">
+        <header
+            class="bg-slate-900/80 p-5 flex items-center justify-between border-b border-slate-700/50 backdrop-blur-md z-10">
             <div class="flex items-center gap-3">
                 <button class="group hover:scale-105 transition" onclick="analyzeSession()" title="تحليل الجلسة">
                     <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-violet-600 to-fuchsia-600 p-[1px]">
-                        <div class="w-full h-full bg-slate-900 rounded-2xl flex items-center justify-center text-lg">🔮</div>
+                        <div class="w-full h-full bg-slate-900 rounded-2xl flex items-center justify-center text-lg">🔮
+                        </div>
                     </div>
                 </button>
                 <button class="group hover:scale-105 transition" onclick="generateCalmingExercise()" title="تمرين هدوء">
                     <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-500 p-[1px]">
-                        <div class="w-full h-full bg-slate-900 rounded-2xl flex items-center justify-center text-lg">🧘</div>
+                        <div class="w-full h-full bg-slate-900 rounded-2xl flex items-center justify-center text-lg">🧘
+                        </div>
                     </div>
                 </button>
-                <h1 class="font-bold text-xl text-white flex items-center gap-2">فَضْفَضَة <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span></h1>
+                <h1 class="font-bold text-xl text-white flex items-center gap-2">فَضْفَضَة <span
+                        class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span></h1>
             </div>
-            
+
             <!-- Branding: Qais Jazi -->
             <div class="flex flex-col items-end justify-center">
                 <span class="text-[9px] uppercase tracking-widest text-slate-500">Created by</span>
-                <span class="text-xs font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400 text-glow">QAIS JAZI</span>
+                <span
+                    class="text-xs font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400 text-glow">QAIS
+                    JAZI</span>
             </div>
         </header>
 
@@ -69,13 +146,15 @@
         <main id="chat-container" class="flex-1 overflow-y-auto p-5 space-y-6 bg-[#0f172a] scrollbar-hide pb-20"></main>
 
         <!-- Input Area -->
-        <div class="absolute bottom-0 w-full z-20 flex flex-col bg-gradient-to-t from-[#1e293b] via-[#1e293b] to-transparent pt-10">
+        <div
+            class="absolute bottom-0 w-full z-20 flex flex-col bg-gradient-to-t from-[#1e293b] via-[#1e293b] to-transparent pt-10">
             <!-- Smart Suggestions -->
             <div id="smart-suggestions" class="px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-hide min-h-[40px]"></div>
-            
+
             <!-- Typing Indicator -->
             <div id="typing-indicator" class="hidden px-6 py-2">
-                <div class="flex items-center gap-1 bg-slate-800/50 px-4 py-2 rounded-2xl border border-slate-700/50 w-fit">
+                <div
+                    class="flex items-center gap-1 bg-slate-800/50 px-4 py-2 rounded-2xl border border-slate-700/50 w-fit">
                     <div class="w-1.5 h-1.5 bg-violet-400 rounded-full typing-dot"></div>
                     <div class="w-1.5 h-1.5 bg-fuchsia-400 rounded-full typing-dot"></div>
                     <div class="w-1.5 h-1.5 bg-violet-400 rounded-full typing-dot"></div>
@@ -84,18 +163,28 @@
 
             <footer class="p-4 bg-slate-900/90 backdrop-blur-xl border-t border-slate-800">
                 <form id="chat-form" class="flex gap-3 relative">
-                    <input type="text" id="user-input" class="w-full bg-slate-800 text-white rounded-2xl pl-5 pr-12 py-4 focus:ring-2 focus:ring-violet-500/50 outline-none border border-slate-700 shadow-inner placeholder-slate-500 transition-all" placeholder="تحدث معي..." autocomplete="off">
-                    <button type="submit" id="send-btn" class="bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white h-[54px] w-[54px] rounded-2xl flex items-center justify-center shadow-lg hover:shadow-violet-500/20 transition-all active:scale-95">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 rotate-180 ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" /></svg>
+                    <input type="text" id="user-input"
+                        class="w-full bg-slate-800 text-white rounded-2xl pl-5 pr-12 py-4 focus:ring-2 focus:ring-violet-500/50 outline-none border border-slate-700 shadow-inner placeholder-slate-500 transition-all"
+                        placeholder="تحدث معي..." autocomplete="off">
+                    <button type="submit" id="send-btn"
+                        class="bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white h-[54px] w-[54px] rounded-2xl flex items-center justify-center shadow-lg hover:shadow-violet-500/20 transition-all active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 rotate-180 ml-1" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                        </svg>
                     </button>
                 </form>
             </footer>
         </div>
 
         <!-- Analysis/Calm Modal -->
-        <div id="analysis-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 modal-inactive modal">
-            <div class="bg-[#1e293b] w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden border border-slate-700/80 relative transform transition-all">
-                <div id="modal-header-color" class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-500 to-fuchsia-500"></div>
+        <div id="analysis-modal"
+            class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 modal-inactive modal">
+            <div
+                class="bg-[#1e293b] w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden border border-slate-700/80 relative transform transition-all">
+                <div id="modal-header-color"
+                    class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-500 to-fuchsia-500"></div>
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h3 id="modal-title" class="font-bold text-lg text-white"></h3>
@@ -123,7 +212,7 @@
         function addMessage(text, sender) {
             const div = document.createElement('div');
             div.className = `flex justify-${sender === 'user' ? 'end' : 'start'} w-full message-enter`;
-            const bubbleHTML = sender === 'user' 
+            const bubbleHTML = sender === 'user'
                 ? `<div class="flex gap-3 max-w-[85%] flex-row-reverse"><div class="bg-gradient-to-bl from-violet-600 to-indigo-600 text-white p-4 rounded-2xl rounded-br-none shadow-lg text-sm md:text-base leading-relaxed border border-violet-500/20"><p>${text}</p></div></div>`
                 : `<div class="flex gap-3 max-w-[90%]"><div class="w-9 h-9 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center shadow-md self-end mb-1">🤖</div><div class="bg-slate-800/90 p-4 rounded-2xl rounded-bl-none border border-slate-700 text-slate-200 text-sm md:text-base leading-relaxed shadow-sm"><p>${text}</p></div></div>`;
             div.innerHTML = bubbleHTML;
@@ -137,15 +226,25 @@
         async function callBackend(type, message = "", history = "") {
             try {
                 // Fetch from the Vercel API endpoint
-                const response = await fetch('/api/chat', { 
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ type, message, history })
                 });
                 const data = await response.json();
+
+                if (!response.ok || data.error) {
+                    console.error("Backend Error:", data.error);
+                    return "عذراً، هناك مشكلة في الإعدادات (API Key مفقود أو خطأ في السيرفر).";
+                }
+
+                if (!data.text) {
+                    return "لم يصل رد من الذكاء الاصطناعي.";
+                }
+
                 return data.text;
             } catch (error) {
-                console.error("Error:", error);
+                console.error("Network Error:", error);
                 return "عذراً، حدث خطأ في الاتصال.";
             }
         }
@@ -154,35 +253,35 @@
             e.preventDefault();
             const text = userInput.value.trim();
             if (!text) return;
-            
+
             smartSuggestionsDiv.innerHTML = '';
             addMessage(text, 'user');
             const historyText = chatHistory.map(m => `${m.role}: ${m.text}`).join('\n');
             chatHistory.push({ role: 'user', text: text });
             userInput.value = '';
-            
+
             userInput.disabled = true;
             typingIndicator.classList.remove('hidden');
             // Scroll to show typing indicator
             chatContainer.scrollTop = chatContainer.scrollHeight;
-            
+
             // Call Chat API
             const botReply = await callBackend('chat', text, historyText);
-            
+
             typingIndicator.classList.add('hidden');
             userInput.disabled = false;
             userInput.focus();
-            
+
             addMessage(botReply, 'bot');
             chatHistory.push({ role: 'bot', text: botReply });
-            
+
             // Get Suggestions
             const suggestions = await callBackend('suggestions', '', historyText + `\nBot: ${botReply}`);
             renderSmartReplies(suggestions.split(/,|،/));
         });
 
         async function analyzeSession() {
-            if(chatHistory.length < 2) return alert("تحدث معي أولاً");
+            if (chatHistory.length < 2) return alert("تحدث معي أولاً");
             openModal("🔮 تحليل الجلسة");
             modalContent.innerHTML = '<div class="text-center animate-pulse">جاري التحليل...</div>';
             const historyText = chatHistory.map(m => `${m.role}: ${m.text}`).join('\n');
@@ -202,7 +301,7 @@
             smartSuggestionsDiv.innerHTML = '';
             list.forEach(s => {
                 const txt = s.trim();
-                if(!txt) return;
+                if (!txt) return;
                 const btn = document.createElement('button');
                 btn.className = 'bg-slate-800/80 hover:bg-violet-600/50 text-xs text-slate-300 px-4 py-2 rounded-full border border-slate-600 transition-colors whitespace-nowrap';
                 btn.innerText = txt;
@@ -218,4 +317,5 @@
         setTimeout(() => addMessage("أهلاً بك في مساحتك الخاصة. أنا هنا لأسمعك.", 'bot'), 500);
     </script>
 </body>
+
 </html>

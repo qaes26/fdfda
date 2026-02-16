@@ -1,8 +1,5 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// Initialize Gemini with the API key from environment variables
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 export default async function handler(req, res) {
   // Add CORS headers to allow requests from the frontend
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,13 +17,20 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    console.error('Error: GEMINI_API_KEY is missing');
+    return res.status(500).json({ error: 'Configuration Error: GEMINI_API_KEY is missing.' });
+  }
+
   try {
+    const genAI = new GoogleGenerativeAI(apiKey);
     const { message, history, type } = req.body;
     // Using the specific requested model
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-preview-09-2025" });
 
     let prompt = "";
-    
+
     // Determine the prompt based on the request type
     if (type === 'analysis') {
       prompt = `
