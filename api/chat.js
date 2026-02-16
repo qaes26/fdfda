@@ -26,8 +26,8 @@ export default async function handler(req, res) {
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const { message, history, type } = req.body;
-    // Using the specific requested model
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Model selection will happen after prompt generation to allow fallback
+
 
     let prompt = "";
 
@@ -75,11 +75,24 @@ export default async function handler(req, res) {
       `;
     }
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro"];
+    let lastError = null;
 
-    return res.status(200).json({ text });
+    for (const modelName of modelsToTry) {
+      try {
+        console.log(`Trying model: ${modelName}`);
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+        return res.status(200).json({ text });
+      } catch (error) {
+        console.error(`Model ${modelName} failed:`, error.message);
+        lastError = error;
+      }
+    }
+
+    return res.status(500).json({ error: `All models failed. Last error: ${lastError?.message}` });
 
   } catch (error) {
     console.error('API Error:', error);
