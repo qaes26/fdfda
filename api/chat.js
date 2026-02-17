@@ -1,37 +1,46 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 export default async function handler(req, res) {
-  // Add CORS headers to allow requests from the frontend
+  // إعدادات CORS للسماح بالطلبات من الواجهة الأمامية
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Handle preflight requests
+  // معالجة طلبات الـ preflight
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
 
-  // Only allow POST requests
+  // السماح بطلبات POST فقط
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    console.error('Error: GEMINI_API_KEY is missing');
-    return res.status(500).json({ error: 'Configuration Error: GEMINI_API_KEY is missing.' });
+  // 1. نظام تدوير المفاتيح (5 مفاتيح لتوزيع الضغط بشكل مثالي)
+  const apiKeys = [
+    process.env.GEMINI_API_KEY_1,
+    process.env.GEMINI_API_KEY_2,
+    process.env.GEMINI_API_KEY_3,
+    process.env.GEMINI_API_KEY_4,
+    process.env.GEMINI_API_KEY_5
+  ].filter(Boolean); // تجاهل أي مفتاح غير موجود في Vercel لتجنب الأخطاء
+
+  if (apiKeys.length === 0) {
+    console.error('Error: No API Keys configured');
+    return res.status(500).json({ error: 'Configuration Error: API Keys are missing.' });
   }
 
-  try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const { message, history, type } = req.body;
-    // Model selection will happen after prompt generation to allow fallback
+  // اختيار مفتاح عشوائي للطلب الحالي من الـ 5 مفاتيح
+  const randomApiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
 
+  try {
+    const genAI = new GoogleGenerativeAI(randomApiKey);
+    const { message, history, type } = req.body;
 
     let prompt = "";
 
-    // Determine the prompt based on the request type
+    // تحديد الـ Prompt بناءً على نوع الطلب
     if (type === 'analysis') {
       prompt = `
       You are "Fadfada" (developed by Qais Jazi). Analyze the following therapy session history.
@@ -58,7 +67,7 @@ export default async function handler(req, res) {
       ${history}
       `;
     } else {
-      // Default Chat Mode
+      // الوضع الافتراضي للدردشة
       prompt = `
       You are a compassionate AI psychiatrist named "Fadfada".
       
@@ -75,23 +84,35 @@ export default async function handler(req, res) {
       `;
     }
 
-    const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro"];
+    // 2. نظام عبور الأخطاء (Fallback)
+    const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"];
     let lastError = null;
 
     for (const modelName of modelsToTry) {
       try {
-        console.log(`Trying model: ${modelName}`);
+        console.log(`Trying model: ${modelName} | Using Key ending in: ...${randomApiKey.slice(-4)}`);
         const model = genAI.getGenerativeModel({ model: modelName });
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();
+        
+        // إذا نجح الموديل، نرسل الرد للمستخدم ونخرج من الـ Loop
         return res.status(200).json({ text });
+        
       } catch (error) {
         console.error(`Model ${modelName} failed:`, error.message);
         lastError = error;
+
+        // إذا كان الخطأ 429 رغم وجود 5 مفاتيح، نرد برسالة لطيفة
+        if (error.message.includes('429') || error.status === 429) {
+           return res.status(200).json({ 
+             text: "السيرفر عليه زحمة شوي من الأصدقاء، خذ نفس عميق وجرب ابعث كمان ثانية ❤️" 
+           });
+        }
       }
     }
 
+    // إذا فشلت كل الموديلات
     return res.status(500).json({ error: `All models failed. Last error: ${lastError?.message}` });
 
   } catch (error) {
