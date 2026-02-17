@@ -265,9 +265,12 @@
                 : `<div class="flex gap-3 max-w-[90%]"><div class="w-9 h-9 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center shadow-md self-end mb-1">🤖</div><div class="bg-slate-800/90 p-4 rounded-2xl rounded-bl-none border border-slate-700 text-slate-200 text-sm md:text-base leading-relaxed shadow-sm break-words whitespace-pre-wrap"><p>${text}</p></div></div>`;
             div.innerHTML = bubbleHTML;
             chatContainer.appendChild(div);
-            // Ensure we scroll to the bottom
+            // Ensure we scroll to the bottom with double-check
             requestAnimationFrame(() => {
                 chatContainer.scrollTop = chatContainer.scrollHeight;
+                setTimeout(() => {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 100);
             });
         }
 
