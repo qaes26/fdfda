@@ -50,15 +50,6 @@
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(139, 92, 246, 0.6);
-            border-radius: 10px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(139, 92, 246, 0.8);
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
             background: rgba(139, 92, 246, 0.3);
             border-radius: 10px;
         }
@@ -131,11 +122,9 @@
 <body class="h-screen flex flex-col items-center justify-center relative selection:bg-violet-500 selection:text-white">
     <div class="cosmic-bg"></div>
 
-    <!-- App Container -->
     <div
         class="w-full h-full md:h-[90vh] md:w-[450px] bg-[#1e293b] md:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden relative border border-slate-700/50">
 
-        <!-- Header -->
         <header
             class="bg-slate-900/80 p-5 flex items-center justify-between border-b border-slate-700/50 backdrop-blur-md z-10">
             <div class="flex items-center gap-3">
@@ -155,7 +144,6 @@
                         class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span></h1>
             </div>
 
-            <!-- Branding: Qais Jazi -->
             <div class="flex flex-col items-end justify-center">
                 <span class="text-[9px] uppercase tracking-widest text-slate-500">Created by</span>
                 <span
@@ -164,17 +152,23 @@
             </div>
         </header>
 
-        <!-- Chat Area -->
-        <main id="chat-container" class="flex-1 overflow-y-auto p-5 space-y-6 bg-[#0f172a] custom-scrollbar pb-20">
+        <main id="chat-container" class="flex-1 overflow-y-auto p-5 space-y-6 bg-[#0f172a] custom-scrollbar pb-[180px]">
         </main>
 
-        <!-- Input Area -->
         <div
             class="absolute bottom-0 w-full z-20 flex flex-col bg-gradient-to-t from-[#1e293b] via-[#1e293b] to-transparent pt-10">
-            <!-- Smart Suggestions -->
+            
+            <button id="scroll-btn" onclick="scrollToBottom()"
+                class="hidden absolute bottom-[180px] right-5 bg-slate-800/80 hover:bg-violet-600 text-white p-3 rounded-full shadow-lg border border-slate-700 transition-all z-30 animate-bounce">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+            </button>
+
             <div id="smart-suggestions" class="px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-hide min-h-[40px]"></div>
 
-            <!-- Typing Indicator -->
             <div id="typing-indicator" class="hidden px-6 py-2">
                 <div
                     class="flex items-center gap-1 bg-slate-800/50 px-4 py-2 rounded-2xl border border-slate-700/50 w-fit">
@@ -183,16 +177,6 @@
                     <div class="w-1.5 h-1.5 bg-violet-400 rounded-full typing-dot"></div>
                 </div>
             </div>
-
-            <!-- Scroll Down Button -->
-            <button id="scroll-btn" onclick="scrollToBottom()"
-                class="hidden absolute bottom-24 right-5 bg-slate-800/80 hover:bg-violet-600 text-white p-3 rounded-full shadow-lg border border-slate-700 transition-all z-30 animate-bounce">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-            </button>
 
             <footer class="p-4 bg-slate-900/90 backdrop-blur-xl border-t border-slate-800">
                 <form id="chat-form" class="flex gap-3 relative">
@@ -211,7 +195,6 @@
             </footer>
         </div>
 
-        <!-- Analysis/Calm Modal -->
         <div id="analysis-modal"
             class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 modal-inactive modal">
             <div
@@ -265,7 +248,7 @@
                 : `<div class="flex gap-3 max-w-[90%]"><div class="w-9 h-9 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center shadow-md self-end mb-1">🤖</div><div class="bg-slate-800/90 p-4 rounded-2xl rounded-bl-none border border-slate-700 text-slate-200 text-sm md:text-base leading-relaxed shadow-sm break-words whitespace-pre-wrap"><p>${text}</p></div></div>`;
             div.innerHTML = bubbleHTML;
             chatContainer.appendChild(div);
-            // Ensure we scroll to the bottom with double-check
+            
             requestAnimationFrame(() => {
                 chatContainer.scrollTop = chatContainer.scrollHeight;
                 setTimeout(() => {
@@ -276,7 +259,6 @@
 
         async function callBackend(type, message = "", history = "") {
             try {
-                // Fetch from the Vercel API endpoint
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -313,10 +295,8 @@
 
             userInput.disabled = true;
             typingIndicator.classList.remove('hidden');
-            // Scroll to show typing indicator
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // Call Chat API
             const botReply = await callBackend('chat', text, historyText);
 
             typingIndicator.classList.add('hidden');
@@ -326,7 +306,6 @@
             addMessage(botReply, 'bot');
             chatHistory.push({ role: 'bot', text: botReply });
 
-            // Get Suggestions
             const suggestions = await callBackend('suggestions', '', historyText + `\nBot: ${botReply}`);
             renderSmartReplies(suggestions.split(/,|،/));
         });
@@ -364,7 +343,6 @@
         function openModal(title) { modal.classList.remove('modal-inactive'); modal.classList.add('modal-active'); modalTitle.innerText = title; }
         function closeModal() { modal.classList.remove('modal-active'); modal.classList.add('modal-inactive'); }
 
-        // Initial Greeting
         setTimeout(() => addMessage("أهلاً بك في مساحتك الخاصة. أنا هنا لأسمعك.", 'bot'), 500);
     </script>
 </body>
