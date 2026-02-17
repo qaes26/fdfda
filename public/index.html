@@ -40,9 +40,22 @@
             }
         }
 
-        /* Utilities */
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.5);
         }
 
         .text-glow {
@@ -143,7 +156,8 @@
         </header>
 
         <!-- Chat Area -->
-        <main id="chat-container" class="flex-1 overflow-y-auto p-5 space-y-6 bg-[#0f172a] scrollbar-hide pb-20"></main>
+        <main id="chat-container" class="flex-1 overflow-y-auto p-5 space-y-6 bg-[#0f172a] custom-scrollbar pb-20">
+        </main>
 
         <!-- Input Area -->
         <div
