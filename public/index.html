@@ -42,11 +42,20 @@
 
         /* Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
             background: rgba(15, 23, 42, 0.5);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.6);
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.8);
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -175,6 +184,16 @@
                 </div>
             </div>
 
+            <!-- Scroll Down Button -->
+            <button id="scroll-btn" onclick="scrollToBottom()"
+                class="hidden absolute bottom-24 right-5 bg-slate-800/80 hover:bg-violet-600 text-white p-3 rounded-full shadow-lg border border-slate-700 transition-all z-30 animate-bounce">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+            </button>
+
             <footer class="p-4 bg-slate-900/90 backdrop-blur-xl border-t border-slate-800">
                 <form id="chat-form" class="flex gap-3 relative">
                     <input type="text" id="user-input"
@@ -221,7 +240,22 @@
         const modalContent = document.getElementById('modal-content');
         const modalTitle = document.getElementById('modal-title');
         const smartSuggestionsDiv = document.getElementById('smart-suggestions');
+        const scrollBtn = document.getElementById('scroll-btn');
         let chatHistory = [];
+
+        // Scroll Logic
+        chatContainer.addEventListener('scroll', () => {
+            const isNearBottom = chatContainer.scrollHeight - chatContainer.scrollTop - chatContainer.clientHeight < 100;
+            if (isNearBottom) {
+                scrollBtn.classList.add('hidden');
+            } else {
+                scrollBtn.classList.remove('hidden');
+            }
+        });
+
+        function scrollToBottom() {
+            chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+        }
 
         function addMessage(text, sender) {
             const div = document.createElement('div');
